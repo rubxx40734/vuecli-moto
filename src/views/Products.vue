@@ -22,10 +22,10 @@
       <td>{{item.category}}</td>
       <td>{{item.title}}</td>
       <td class="text-right">
-        {{item.origin_price}}
+        {{$filters.currency(item.origin_price)}}
       </td>
       <td class="text-right">
-        {{item.price}}
+        {{$filters.currency(item.price)}}
       </td>
       <td>
         <span class="text-success" v-if="item.is_enabled">啟用</span>
@@ -42,6 +42,12 @@
     </tr>
   </tbody>
 </table>
+
+<Pagination :pages="pagination"
+@emit-pages="getProducts"
+@next-page="getProducts"
+@pre-page="getProducts"></Pagination>
+
 <ProductModal ref="productModal"
 v-bind:product="tempProduct"
 @update-product="updateProduct"></ProductModal>
@@ -54,6 +60,7 @@ v-bind:item="tempProduct"
 <script>
 import ProductModal from '../components/ProductsModal.vue'
 import DelModal from '../components/DelModal.vue'
+import Pagination from '../components/Pagination.vue'
 export default {
   data () {
     return {
@@ -66,7 +73,8 @@ export default {
   },
   components: {
     ProductModal,
-    DelModal
+    DelModal,
+    Pagination
   },
   inject: ['emitter'],
   methods: {
@@ -85,9 +93,8 @@ export default {
       const productComponent = this.$refs.productModal
       productComponent.hideModal()
     },
-    getProducts () {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products`
-      console.log(process.env.VUE_APP_API, process.env.VUE_APP_PATH)
+    getProducts (page = 1) {
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`
       this.isLoading = true
       this.axios.get(api)
         .then(res => {
@@ -122,7 +129,7 @@ export default {
             this.emitter.emit('push-message', {
               style: 'danger',
               title: '更新失敗><',
-              content: res.data.messages
+              content: res.data.message.join('、')
             })
           }
           this.closeModal()

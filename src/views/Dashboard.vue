@@ -1,9 +1,11 @@
 <template>
-  <navbar></navbar>
+  <navbar>
+  </navbar>
   <!-- <div class="container">
       <router-view/>
   </div> -->
-  <div class="container mt-3 position-relative">
+  <div class="container mt-3 position-relative border">
+    新竹關之琳
     <ToastMessages></ToastMessages>
     <router-view/>
   </div>

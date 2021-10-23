@@ -28,7 +28,7 @@
             <input type="file" id="customFile" class="form-control"
             ref="fileInput"  @change="uploadFile">
           </div>
-          <img class="img-fluid" alt="">
+          <img class="img-fluid" :src="tempProduct.imageUrl">
           <!-- 延伸技巧，多圖 -->
           <div class="mt-5">
             <div class="mb-3 input-group" >
@@ -94,6 +94,7 @@
               <input class="form-check-input" type="checkbox"
                       :true-value="1"
                       :false-value="0"
+                      v-model="tempProduct.is_enabled"
                       id="is_enabled">
               <label class="form-check-label" for="is_enabled">
                 是否啟用
